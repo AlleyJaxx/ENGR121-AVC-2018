@@ -7,31 +7,23 @@ void stop();
 int main()
 {
     init();
-    turn(0);
-    sleep1(3,500000);
-    turn(-1);
-    sleep1(3,0);
     turn(-0.5);
-    sleep1(3,0);
-    turn(0);
-    sleep1(3,0);
-	turn(0.5);
-    sleep1(3,0);
-    turn(1);
     sleep1(3,0);
     stop();
    
     
 }
 void turn(double amount){
-    int v_go=100;
-    int Kp=50;
+    double v_go=50;
+    double left_bias = 1.15;
+    double Kp=30;
     int left=0;
     int right=0;
-    left= v_go+Kp*amount;
-    right= v_go-Kp*amount;
-    set_motor(1,left);
-    set_motor(2,right);
+    left= (int)((v_go+Kp*amount)*left_bias);
+    right= (int)(v_go-Kp*amount);
+    printf("%d,%d\n",left,right);
+    set_motor(2,left);
+    set_motor(1,right);
 }
 void stop(){
     set_motor(1,0);
