@@ -1,24 +1,40 @@
 #include <stdio.h>
 #include "E101.h"
+#include "image_processing.h"
+#include <sys/time.h>
 
-void turn(double);
-void stop();
+double v_go=50;
+double left_bias = 1.15;
+double Kp=30;
 
 int main()
 {
     //test - just makes it go forward for 2 secs
 	init();
-    init();
-    turn(-0.5);
-    sleep1(3,0);
-    stop();
-   
+    set_threshold();
     
+    struct timeval t1;
+    struct timeval t2;
+    gettimeofday(&t1,0);
+    
+    while(1)
+    {
+        double amount = get_turn();
+        turn(amount);
+        
+		gettimeofday(&t2,0);
+		//break after 10 seconds
+		long elapsed = (t2.tv_sec -t1.tv_sec)
+		if(elapsed>10)
+		{
+			break;
+		}
+		sleep1(0,50);
+    }
+    
+    stop(); 
 }
 void turn(double amount){
-    double v_go=50;
-    double left_bias = 1.15;
-    double Kp=30;
     int left=0;
     int right=0;
     left= (int)((v_go+Kp*amount)*left_bias);
@@ -30,5 +46,4 @@ void turn(double amount){
 void stop(){
     set_motor(1,0);
     set_motor(2,0);
->>>>>>> adam
 }
