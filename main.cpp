@@ -8,6 +8,9 @@ double Kp=30;
 
 int white_threshold = 127;
 
+void turn(double);
+void stop();
+
 void set_threshold()
 {
 	//get picture
@@ -83,7 +86,7 @@ int main()
         
 		gettimeofday(&t2,0);
 		//break after 10 seconds
-		long elapsed = (t2.tv_sec -t1.tv_sec)
+		long elapsed = (t2.tv_sec -t1.tv_sec);
 		if(elapsed>10)
 		{
 			break;
