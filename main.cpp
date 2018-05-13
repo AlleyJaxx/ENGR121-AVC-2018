@@ -28,7 +28,7 @@ int main()
 		gettimeofday(&t2,0);
 		//break after 10 seconds
 		long elapsed = (t2.tv_sec -t1.tv_sec);
-		if(elapsed>10)
+		if(elapsed>5)
 		{
 			break;
 		}

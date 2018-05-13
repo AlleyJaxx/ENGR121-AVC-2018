@@ -2,6 +2,9 @@
 #include "img_process.h"
 #include <stdio.h>
 
+int white_threshold = 127;
+bool DEBUG = true;
+
 /**
 * Sets the threshold value for checking white
 */
