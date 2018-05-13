@@ -16,7 +16,7 @@ int main()
 	init();
     set_threshold();
     
-    struct timeval t1;
+    /*struct timeval t1;
     struct timeval t2;
     gettimeofday(&t1,0);
     
@@ -35,7 +35,7 @@ int main()
 		sleep1(0,50);
     }
     
-    stop(); 
+    stop();*/ 
 }
 
 /**
