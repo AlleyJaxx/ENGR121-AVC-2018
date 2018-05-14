@@ -3,6 +3,8 @@
 
 int main(){
 	
+	init();
+	
 	char server_addr[15] = "130.195.6.196";
 	int port = 1024;
 	char message[24] = "Please";
