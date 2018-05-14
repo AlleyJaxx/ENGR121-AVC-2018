@@ -74,14 +74,22 @@ double get_turn()
 	}
 
 	//no white pixels
-	if(white_pixels==0)
+	if(white_pixels<3)
 	{
 		if(DEBUG)
 		{
 			printf("no white\n");
 		}
-		return 0;
+		return NO_WHITE;
 	}
+	if(white_pixels>317)
+    {
+        if(DEBUG)
+        {
+            printf("all white\n");
+        }
+        return ALL_WHITE;
+    }
 	
 
 	//average location of the white pixels
