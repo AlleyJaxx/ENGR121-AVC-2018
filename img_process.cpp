@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 int white_threshold = 127;
-bool DEBUG = true;
+bool DEBUG = false;
 
 /**
 * Sets the threshold value for checking white
@@ -50,12 +50,12 @@ void set_threshold()
  * */
 double get_turn()
 {
-	if(DEBUG)
-	{
-		printf("---------\n");
-	}
+	
 	//get picture
     take_picture();
+	if(DEBUG){
+		printf("-----\n");
+}
 	
     int white_pixels = 0;
     double white_location = 0;
@@ -63,17 +63,13 @@ double get_turn()
 	int y = 120;
     for(int x=0;x<320;x++)
     {
-		double percent_location = (x-160.0)/160.0;//-1 = completely to left, 1 = completely to right, 0 = centre
+		double percent_location = ((double)x-160.0)/160.0;
 		int white = get_pixel(y,x,3);
 		//detect white
 		if(white>white_threshold)
 		{
-			white_pixels++;
-			if(DEBUG)
-			{
-				printf("white (%d) at x=%d. Loc=%d\n",white,x,percent_location);
-			}
 			white_location += percent_location;
+			white_pixels++;
 		}
 	}
 
@@ -93,7 +89,7 @@ double get_turn()
 	
 	if(DEBUG)
 	{
-		printf("%d white. avg loc=%d\n",white_pixels,average_white_location);
+		printf("%d white. avg loc = %f\n",white_pixels,average_white_location);
 	}
 	
 	return average_white_location;

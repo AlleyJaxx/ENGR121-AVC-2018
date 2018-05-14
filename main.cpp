@@ -32,7 +32,7 @@ int main()
 		{
 			break;
 		}
-		sleep1(0,50);
+		sleep1(0,1000);
     }
     
     stop(); 
