@@ -1,18 +1,16 @@
 #include <stdio.h>
 #include "E101.h"
-#include "img_process.h"
+#include "quadrant3.h"
 #include <sys/time.h>
 
 double v_go=50;
 double left_bias = 1.15;
 double Kp=100;
-int quadrant = 1;
 
 void turn(double);
 void reverse();
 void stop();
-void openGate();
-void quadrant2();
+void quadrant3();
 
 int main()
 {
@@ -20,16 +18,12 @@ int main()
 	init();
     
     //quadrant 1
-    openGate();
     set_threshold();
     sleep1(1,0);
     
-    //quadrant 2
-    quadrant = 2;
-    
-    while(quadrant == 2)
+    while(1)
     {
-        quadrant2();
+        quadrant3();
 		sleep1(0,1000);
     }
     
@@ -39,13 +33,9 @@ int main()
 /**
  * Line following quadrant
  */
-void quadrant2() {
-    double amount = get_turn();
-    //If it sees all white - it is on the next section (break for now)
-    if(amount==ALL_WHITE)
-    {
-        quadrant = 3;
-    }
+void quadrant3() {
+    double amount = doScan();
+    
     //If it sees no white - it is off course and will reverse
     else if(amount==NO_WHITE)
     {

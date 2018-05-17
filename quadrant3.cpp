@@ -1,19 +1,10 @@
 #include <stdio.h>
 #include "E101.h"
-
+#include "quadrant3.h"
 
 int detectedInstersection = 0;
 
-
 int white_threshold = 127;
-
-
-int NO_WHITE = 10;
-
-
-
-int endOfQuadrant = 11;
-
 
 bool DEBUG = false;
 
@@ -55,15 +46,6 @@ void set_threshold()
 	{
 		printf("Thres: %d. Min=%d, Max=%d\n",white_threshold,min_white,max_white);
 	}
-}
-
-
-
-int main() {
-	init();
-	
-	
-	
 }
 
 double doScan() {
