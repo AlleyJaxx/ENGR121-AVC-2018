@@ -169,6 +169,7 @@ double doScan() {
 	//reset variables
 	detectedIntersection = 0;
 	turn_value = NO_WHITE;
+	
 	//Go forward
 	//printf("Forward\n");
 	double average_white_location = white_location / (white_pixels_right + white_pixels_left);
