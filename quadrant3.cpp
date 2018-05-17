@@ -2,7 +2,7 @@
 #include "E101.h"
 #include "quadrant3.h"
 
-int detectedInstersection = 0;
+int detectedIntersection = 0;
 int timer = 0;
 int white_threshold = 127;
 
@@ -84,52 +84,80 @@ double doScan() {
 	//detects T intersection
 	if (all_white_left && all_white_right) {
 		timer = 0;
-		detectedInstersection = 1;
-		if(DEBUG) {
-			printf("T\n");
+		if(detectedIntersection!=1){
+			detectedIntersection = 1;
+			if(DEBUG) {
+				printf("T\n");
+			}
 		}
 		return 0;
 	//Intersection on left only
-	} else if (all_white_left && detectedIntersection!=3) {
+	} else if (all_white_left) {
 		timer = 0;
-		detectedInstersection = 2;
-		if(DEBUG) {
-			printf("Left\n");
+		if(detectedIntersection==0){
+			detectedIntersection = 2;
+		
+			if(DEBUG) {
+				printf("Left\n");
+			}
+		}else if(detectedIntersection==3){
+			detectedIntersection=2;
+			if(DEBUG){
+				printf("T\n");
+			}
 		}
 		return 0;
 	//Intersection on right only
-	} else if (!all_white_left && detectedIntersection!=2) {
+	} else if (all_white_right) {
 		timer = 0;
-		detectedInstersection = 3;
-		if(DEBUG) {
-			printf("Right\n");
+		if(detectedIntersection==0){
+			detectedIntersection = 3;
+		
+			if(DEBUG) {
+				printf("Right\n");
+			}
+		}else if(detectedIntersection==2){
+			detectedIntersection=1;
+			if(DEBUG){
+                                printf("T\n");
+                        }
+
 		}
 		return 0;
 	}
 	
 	//Detects only black
 	if (white_pixels_left + white_pixels_right < 3) {
-		printf("All black\n");
+		//printf("All black\n");
 		//TURN RIGHT
 		if(detectedIntersection==3){
+			if(DEBUG){
+				printf("Turning Right\n");
+			}
 			return 0.4;
 		//TURN LEFT
-		}else {
+		}else if(detectedIntersection==2 || detectedIntersection==1){
+			if(DEBUG){
+				printf("Turning Left\n");
+			}
 			return -0.4;
+		//DEAD END
+		}else{
+			return NO_WHITE;
 		}
 	}
 	
-	//wants to go straight but intersection seen previously, keep going straight for 10 more checks
+	//wants to go straight but intersection seen previously, keep going straight for n more checks
 	if(detectedIntersection!=0){
 		timer++;
-		//10 checks before it continues following the line.
-		if(timer<10) {
+		//n checks before it continues following the line.
+		if(timer<15) {
 			return 0;
 		}
 	}
 	detectedIntersection = 0;
 	//Go forward
-	printf("Forward\n");
+	//printf("Forward\n");
 	double average_white_location = white_location / (white_pixels_right + white_pixels_left);
 	
 	return average_white_location;
