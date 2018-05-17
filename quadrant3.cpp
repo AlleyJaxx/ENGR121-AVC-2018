@@ -3,7 +3,7 @@
 #include "quadrant3.h"
 
 int detectedInstersection = 0;
-
+int timer = 0;
 int white_threshold = 127;
 
 bool DEBUG = true;
@@ -12,7 +12,7 @@ bool DEBUG = true;
 * Sets the threshold value for checking white
 */
 void set_threshold()
-{
+{	
 	//get picture
     take_picture();
 	
@@ -49,9 +49,9 @@ void set_threshold()
 }
 
 double doScan() {
-	
 	take_picture();
 	
+	//calculate number of pixels on left side of screen and right
 	int white_pixels_left = 0;
 	int white_pixels_right = 0;
 	
@@ -72,57 +72,65 @@ double doScan() {
 					
 			} else {	
 				white_pixels_right++;
-				
 			}
-			
-			
-			
 		}
 	
 	}
 
-	
+	//whether all pixels on left or on right are white.
 	bool all_white_left = white_pixels_left > 157.0;
-	
 	bool all_white_right = white_pixels_right > 157.0;
-		
 	
+	//detects T intersection
 	if (all_white_left && all_white_right) {
+		timer = 0;
 		detectedInstersection = 1;
-		printf("T\n");
-		
+		if(DEBUG) {
+			printf("T\n");
+		}
 		return 0;
-	} else if (all_white_left && !all_white_right) {
-		
+	//Intersection on left only
+	} else if (all_white_left && detectedIntersection!=3) {
+		timer = 0;
 		detectedInstersection = 2;
-		printf("Left\n");
+		if(DEBUG) {
+			printf("Left\n");
+		}
 		return 0;
-		
-	} else if (!all_white_left && all_white_right) {
-		
+	//Intersection on right only
+	} else if (!all_white_left && detectedIntersection!=2) {
+		timer = 0;
 		detectedInstersection = 3;
-		printf("Right\n");
+		if(DEBUG) {
+			printf("Right\n");
+		}
 		return 0;
-	} else {
-		
-		detectedInstersection = 0;
-		
 	}
 	
+	//Detects only black
 	if (white_pixels_left + white_pixels_right < 3) {
-		printf("REVERSE\n");
-		return NO_WHITE;
-		
-		
-		
+		printf("All black\n");
+		//TURN RIGHT
+		if(detectedIntersection==3){
+			return 0.4;
+		//TURN LEFT
+		}else {
+			return -0.4;
+		}
 	}
 	
-	printf("FORWARD\n");
+	//wants to go straight but intersection seen previously, keep going straight for 10 more checks
+	if(detectedIntersection!=0){
+		timer++;
+		//10 checks before it continues following the line.
+		if(timer<10) {
+			return 0;
+		}
+	}
+	detectedIntersection = 0;
+	//Go forward
+	printf("Forward\n");
 	double average_white_location = white_location / (white_pixels_right + white_pixels_left);
 	
 	return average_white_location;
-	
-		
-		
-	
 }
