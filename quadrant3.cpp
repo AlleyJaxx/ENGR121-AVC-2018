@@ -4,6 +4,7 @@
 
 int detectedIntersection = 0;
 int timer = 0;
+int turn_value = 0;
 int white_threshold = 127;
 
 bool DEBUG = true;
@@ -87,7 +88,7 @@ double doScan() {
 		if(detectedIntersection!=1){
 			detectedIntersection = 1;
 			if(DEBUG) {
-				printf("T\n");
+				printf("T intersect\n");
 			}
 		}
 		return 0;
@@ -96,14 +97,13 @@ double doScan() {
 		timer = 0;
 		if(detectedIntersection==0){
 			detectedIntersection = 2;
-		
 			if(DEBUG) {
-				printf("Left\n");
+				printf("Left intersect\n");
 			}
 		}else if(detectedIntersection==3){
 			detectedIntersection=2;
 			if(DEBUG){
-				printf("T\n");
+				printf("T intersect\n");
 			}
 		}
 		return 0;
@@ -112,39 +112,44 @@ double doScan() {
 		timer = 0;
 		if(detectedIntersection==0){
 			detectedIntersection = 3;
-		
 			if(DEBUG) {
-				printf("Right\n");
+				printf("Right intersect\n");
 			}
 		}else if(detectedIntersection==2){
 			detectedIntersection=1;
 			if(DEBUG){
-                                printf("T\n");
-                        }
-
+                printf("T intersect\n");
+            }
 		}
 		return 0;
 	}
 	
-	//Detects only black
+	//Detects only black - at the end of an intersection - turn the correct direction
 	if (white_pixels_left + white_pixels_right < 3) {
-		//printf("All black\n");
-		//TURN RIGHT
-		if(detectedIntersection==3){
-			if(DEBUG){
-				printf("Turning Right\n");
+		if(detectedIntersection!=0) {
+			//TURN RIGHT
+			if(detectedIntersection==3){
+				if(DEBUG){
+					printf("Turning Right\n");
+				}
+				turn_value = 0.4;
+			//TURN LEFT
+			}else if(detectedIntersection==2 || detectedIntersection==1){
+				if(DEBUG){
+					printf("Turning Left\n");
+				}
+				turn_value = -0.4;
+			//DEAD END
+			}else{
+				if(DEBUG){
+					printf("Dead end?\n");
+				}
+				turn_value = NO_WHITE;
 			}
-			return 0.4;
-		//TURN LEFT
-		}else if(detectedIntersection==2 || detectedIntersection==1){
-			if(DEBUG){
-				printf("Turning Left\n");
-			}
-			return -0.4;
-		//DEAD END
-		}else{
-			return NO_WHITE;
+			detectedIntersection = 0;
 		}
+		//printf("All black\n");
+		return turn_value;
 	}
 	
 	//wants to go straight but intersection seen previously, keep going straight for n more checks
@@ -152,10 +157,18 @@ double doScan() {
 		timer++;
 		//n checks before it continues following the line.
 		if(timer<15) {
+			if(DEBUG){
+				printf(".");
+			}
 			return 0;
 		}
+		if(DEBUG){
+			printf("Continuing forward\n");
+		}
 	}
+	//reset variables
 	detectedIntersection = 0;
+	turn_value = NO_WHITE;
 	//Go forward
 	//printf("Forward\n");
 	double average_white_location = white_location / (white_pixels_right + white_pixels_left);
