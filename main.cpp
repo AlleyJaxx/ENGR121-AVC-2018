@@ -37,7 +37,7 @@ void quadrant3() {
     double amount = doScan();
     
     //If it sees no white - it is off course and will reverse
-    else if(amount==NO_WHITE)
+    if(amount==NO_WHITE)
     {
         reverse();
     }

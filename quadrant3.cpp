@@ -6,7 +6,7 @@ int detectedInstersection = 0;
 
 int white_threshold = 127;
 
-bool DEBUG = false;
+bool DEBUG = true;
 
 /**
 * Sets the threshold value for checking white
@@ -89,10 +89,8 @@ double doScan() {
 	
 	if (all_white_left && all_white_right) {
 		detectedInstersection = 1;
-		if(DEBUG){
-			printf("T\n");
-			
-		}
+		printf("T\n");
+		
 		return 0;
 	} else if (all_white_left && !all_white_right) {
 		
@@ -108,19 +106,19 @@ double doScan() {
 	} else {
 		
 		detectedInstersection = 0;
-		printf("Forward\n");
 		
 	}
 	
-	if (all_white_left + all_white_right < 3) {
-		
+	if (white_pixels_left + white_pixels_right < 3) {
+		printf("REVERSE\n");
 		return NO_WHITE;
 		
 		
 		
 	}
 	
-	double average_white_location = white_location / (all_white_right + all_white_left);
+	printf("FORWARD\n");
+	double average_white_location = white_location / (white_pixels_right + white_pixels_left);
 	
 	return average_white_location;
 	
