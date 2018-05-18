@@ -5,7 +5,6 @@
 int white_threshold = 127;
 int detectedIntersection = 0;
 int timer = 0;
-int white_threshold = 127;
 
 bool DEBUG = true;
 
@@ -58,11 +57,27 @@ void set_threshold()
 }
 
 /**
+* returns whether it can see red
+*/
+bool check_red()
+{
+	take_picture();
+	
+	r = get_pixel(120,160,0);
+	g = get_pixel(120,160,1);
+	b = get_pixel(120,160,2);
+	return (r>150 && g<80 && b<80);
+}
+
+/**
  * Quadrant 2
  * */
-double get_turn()
+double quadrant2_turn()
 {
 	set_threshold();
+	if(check_red()) {
+		return RED;
+	}
 	//get picture
     take_picture();
 	if(DEBUG){
@@ -117,7 +132,7 @@ double get_turn()
 /**
 * Quadrant 3
 */
-double doScan() {
+double quadrant3_turn() {
 	set_threshold();
 	take_picture();
 	

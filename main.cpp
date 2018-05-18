@@ -26,6 +26,7 @@ int main()
     sleep1(0,500000);
     
     //quadrant 2
+	printf("quadrant2");
     quadrant = 2;
     
     while(quadrant == 2)
@@ -33,12 +34,14 @@ int main()
         quadrant2();
 		sleep1(0,100);
     }
+	printf("quadrant3");
     Kp = 80;
     while(quadrant == 3)
     {  
         quadrant3();
         sleep1(0,100);
     }
+	printf("quadrant4");
     stop(); 
 }
 
@@ -60,7 +63,7 @@ void openGate() {
  * Line following quadrant
  */
 void quadrant2() {
-    double amount = get_turn();
+    double amount = quadrant2_turn();
     //If it sees all white - it is on the next section (break for now)
     if(amount==ALL_WHITE)
     {
@@ -82,27 +85,36 @@ void quadrant2() {
  * Line following quadrant
  */
 void quadrant3() {
-    double amount = doScan();
+    double amount = quadrant3_turn();
     
     //If it sees no white - it is off course and will reverse
     if(amount==NO_WHITE)
     {
         reverse();
     }
-	else if(amount==LEFT) {
+	//Turn left
+	else if(amount==LEFT)
+	{
 		stop();
 		sleep1(0,300000);
 		turn(-0.65);
 		sleep1(0,500000);
-	}else if(amount==RIGHT) {
+	}
+	//Turn right
+	else if(amount==RIGHT) {
 		stop();
 		sleep1(0,300000);
-                turn(0.65);
-                sleep1(0,500000);
-        }
-
+        turn(0.65);
+        sleep1(0,500000);
+	
+	}
+	//finish quadrant 3
+	else if(amount==RED)
+	{
+		quadrant = 4;
+	}
     //Otherwise - turn based on the amount given
-    else
+	else
     {
         turn(amount);
     }
