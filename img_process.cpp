@@ -39,8 +39,13 @@ void set_threshold()
 		}
 	}
 	//threshold
-	white_threshold = min_white+(max_white-min_white)/2;
+	int threshold = min_white+(max_white-min_white)/2;
 	
+	if(min_white-max_white<50 || threshold>180 || threshold<80){
+		return;
+	}
+	printf("%s\n",threshold);
+	white_threshold = threshold;
 	if(DEBUG)
 	{
 		printf("Thres: %d. Min=%d, Max=%d\n",white_threshold,min_white,max_white);
@@ -93,7 +98,10 @@ double get_turn()
         return ALL_WHITE;
     }
 	
-
+	//reset threshold
+	if(white_pixels>50 && white_pixels < 270) {
+		set_threshold();
+	}
 	//average location of the white pixels
 	double average_white_location = white_location/white_pixels;
 	

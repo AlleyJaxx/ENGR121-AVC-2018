@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include "E101.h"
 #include "img_process.h"
-#include "quadrant3.h"
 #include <sys/time.h>
 
 double v_go=50;

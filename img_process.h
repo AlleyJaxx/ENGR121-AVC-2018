@@ -10,6 +10,6 @@
 
 void set_threshold();
 double get_turn();
-void doScan();
+double doScan();
 
 #endif
