@@ -5,7 +5,7 @@
 
 double v_go=50;
 double left_bias = 1.15;
-double Kp=100;
+double Kp=80;
 
 void turn(double);
 void reverse();
@@ -24,7 +24,7 @@ int main()
     while(1)
     {
         quadrant3();
-		sleep1(0,1000);
+		sleep1(0,100);
     }
     
     stop(); 
@@ -41,6 +41,18 @@ void quadrant3() {
     {
         reverse();
     }
+	else if(amount==LEFT) {
+		stop();
+		sleep1(0,300000);
+		turn(-0.65);
+		sleep1(0,500000);
+	}else if(amount==RIGHT) {
+		stop();
+		sleep1(0,300000);
+                turn(0.65);
+                sleep1(0,500000);
+        }
+
     //Otherwise - turn based on the amount given
     else
     {
