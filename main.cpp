@@ -1,15 +1,18 @@
 #include <stdio.h>
 #include "E101.h"
-#include "quadrant3.h"
+#include "img_process.h"
 #include <sys/time.h>
 
 double v_go=50;
 double left_bias = 1.15;
 double Kp=100;
+int quadrant = 1;
 
 void turn(double);
 void reverse();
 void stop();
+void openGate();
+void quadrant2();
 void quadrant3();
 
 int main()
@@ -18,16 +21,61 @@ int main()
 	init();
     
     //quadrant 1
+    openGate();
     set_threshold();
-    sleep1(1,0);
+    sleep1(0,500000);
     
-    while(1)
+    //quadrant 2
+    quadrant = 2;
+    
+    while(quadrant == 2)
     {
-        quadrant3();
-		sleep1(0,1000);
+        quadrant2();
+		sleep1(0,100);
     }
-    
+    Kp = 80;
+    while(quadrant == 3)
+    {  
+        quadrant3();
+        sleep1(0,100);
+    }
     stop(); 
+}
+
+
+/**Open gate 1*/
+void openGate() {
+    char server_addr[15] = "130.195.6.196";
+	int port = 1024;
+	char message[24] = "Please";
+
+	connect_to_server(server_addr, port);
+	send_to_server(message);
+	receive_from_server(message);
+	send_to_server(message);
+}
+
+
+/**
+ * Line following quadrant
+ */
+void quadrant2() {
+    double amount = get_turn();
+    //If it sees all white - it is on the next section (break for now)
+    if(amount==ALL_WHITE)
+    {
+        quadrant = 3;
+    }
+    //If it sees no white - it is off course and will reverse
+    else if(amount==NO_WHITE)
+    {
+        reverse();
+    }
+    //Otherwise - turn based on the amount given
+    else
+    {
+        turn(amount);
+    }
 }
 
 /**
@@ -41,6 +89,18 @@ void quadrant3() {
     {
         reverse();
     }
+	else if(amount==LEFT) {
+		stop();
+		sleep1(0,300000);
+		turn(-0.65);
+		sleep1(0,500000);
+	}else if(amount==RIGHT) {
+		stop();
+		sleep1(0,300000);
+                turn(0.65);
+                sleep1(0,500000);
+        }
+
     //Otherwise - turn based on the amount given
     else
     {
