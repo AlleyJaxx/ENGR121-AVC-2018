@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "E101.h"
 
-double get_turn();
+double test_threshold();
 
 
 int main()
@@ -9,20 +9,14 @@ int main()
     //test - just makes it go forward for 2 secs
 	init();
 	
-	for(int i = 0;i<10;i++)
-	{
-		sleep1(1,0);
-		printf("Test %d: %f",i,get_turn());
-	}
-	
-    printf();
+	while(1) {
+        test_threshold();
+        sleep1(1,0);
+    }
 	return 0;
 }
 
-/**
- * This will return a value between -1 and 1 of where the white line is. 0 is the exact centre. 1 is all the way to right, -1 is all the way to left
- * */
-double get_turn()
+double test_threshold()
 {
 	//get picture
     take_picture();
@@ -44,25 +38,6 @@ double get_turn()
 			min_white = white;
 		}
 	}
-	//threshold
-	int white_threshold = min_white+(max_white-min_white)/2
-    
-    int white_pixels = 0;
-    double white_location = 0;
-    
-    for(int x=0;x<320;x++)
-    {
-		double percent_location = (x-120)/120;//-1 = completely to left, 1 = completely to right, 0 = centre
-		int white = get_pixel(y,x,3);
-		//detect white
-		if(white>threshold)
-		{
-			white_pixels++;
-			white_location += percent_location;
-		}
-	}
-	
-	//average location of the white pixels
-	double average_white_location = white_location/white_pixels;
-	return average_white_location;
+	int range = max_white-min_white;
+	printf("Min=%d Max=%d Range=%d",min_white,max_white,range);
 }
