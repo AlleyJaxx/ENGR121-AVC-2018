@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Milestone & objectives:
 
 Thursday Week 1 - 3rd May
@@ -61,3 +62,43 @@ Thursday Week 2 - 10th – 16th May
      - Adam: Develop code for basic movement (moving in a straight line, turning, reversing).
      - Thomas: Implement sensor averaging and image processing code (quadrant 2).
      - Kirsty: Develop networking code (quadrant 1). Organise next meeting. Update progress and documentation in github. Check in on members progress.
+=======
+Things to do
+
+Thursday Week 1:
+Discuss design ideas / roles / exchange contacts (everyone)
+Setup github repository (everyone)
+
+After Thursday Week 1:
+Get the hardware construction somewhat done
+Finish plan
+
+Before Thursday Week 2:
+Make sure that the github repository is working
+
+Thursday Week 2:
+Get the line following code to work
+Get quadrant 1/2 to work
+
+After Thursday Week 2:
+Get quadrant 3 to work
+
+Before Thursday Week 3:
+Start on the progress report
+
+Thursday Week 3:
+Finish most of the code + quadrant 4
+
+After Thursday Week 3:
+Get the robot finished
+Finish progress report
+
+Before Thursday Week 4:
+...
+
+Thursday Week 4:
+Testing happens during this lab
+
+After Week 4:
+Final report
+>>>>>>> 0bceccd6e1c97d776189873ffa230014486d3ef8

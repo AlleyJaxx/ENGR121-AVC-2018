@@ -1,138 +1,42 @@
 #include <stdio.h>
 #include "E101.h"
-#include "img_process.h"
-#include <sys/time.h>
 
-double v_go=50;
-double left_bias = 1.15;
-double Kp=100;
-int quadrant = 1;
-
-void turn(double);
-void reverse();
-void stop();
-void openGate();
-void quadrant2();
-void quadrant3();
+double test_threshold();
 
 int main()
 {
     //test - just makes it go forward for 2 secs
 	init();
+
+	while(1) {
+        test_threshold();
+        sleep1(1,0);
+    }
+	return 0;
+}
+
+double test_threshold()
+{
+	//get picture
+    take_picture();
     
-    //quadrant 1
-    openGate();
-    set_threshold();
-    sleep1(0,500000);
+    //determine minimum and maximum shades of white in the picture
+    int min_white = 255;
+    int max_white = 0;
     
-    //quadrant 2
-    quadrant = 2;
-    
-    while(quadrant == 2)
+    int y = 120;
+    for(int x=0;x<320;x++)
     {
-        quadrant2();
-		sleep1(0,100);
-    }
-    Kp = 80;
-    while(quadrant == 3)
-    {  
-        quadrant3();
-        sleep1(0,100);
-    }
-    stop(); 
-}
-
-
-/**Open gate 1*/
-void openGate() {
-    char server_addr[15] = "130.195.6.196";
-	int port = 1024;
-	char message[24] = "Please";
-
-	connect_to_server(server_addr, port);
-	send_to_server(message);
-	receive_from_server(message);
-	send_to_server(message);
-}
-
-
-/**
- * Line following quadrant
- */
-void quadrant2() {
-    double amount = get_turn();
-    //If it sees all white - it is on the next section (break for now)
-    if(amount==ALL_WHITE)
-    {
-        quadrant = 3;
-    }
-    //If it sees no white - it is off course and will reverse
-    else if(amount==NO_WHITE)
-    {
-        reverse();
-    }
-    //Otherwise - turn based on the amount given
-    else
-    {
-        turn(amount);
-    }
-}
-
-/**
- * Line following quadrant
- */
-void quadrant3() {
-    double amount = doScan();
-    
-    //If it sees no white - it is off course and will reverse
-    if(amount==NO_WHITE)
-    {
-        reverse();
-    }
-	else if(amount==LEFT) {
-		stop();
-		sleep1(0,300000);
-		turn(-0.65);
-		sleep1(0,500000);
-	}else if(amount==RIGHT) {
-		stop();
-		sleep1(0,300000);
-                turn(0.65);
-                sleep1(0,500000);
-        }
-
-    //Otherwise - turn based on the amount given
-    else
-    {
-        turn(amount);
-    }
-}
-
-/**
- * Turns the robot
- * */
-void turn(double amount){
-    int left= (int)((v_go+Kp*amount)*left_bias);
-    int right= (int)(v_go-Kp*amount);
-    set_motor(2,left);
-    set_motor(1,right);
-}
-
-/**
- * Makes the robot go in reverse
- * */
-void reverse() {
-    int left = -(v_go*left_bias);
-    int right = -(v_go);
-
-    set_motor(2,left);
-    set_motor(1,right);
-}
-
-/**
- * Stops the robot
- * */
-void stop(){
-    set_motor(1,0);
-    set_motor(2,0);
+		int white = get_pixel(y,x,3);
+		if(white>max_white)
+		{
+			max_white = white;
+		}
+		if(white<min_white)
+		{
+			min_white = white;
+		}
+	}
+	int range = max_white-min_white;
+	printf("Min=%d Max=%d Range=%d\n",min_white,max_white,range);
 }
