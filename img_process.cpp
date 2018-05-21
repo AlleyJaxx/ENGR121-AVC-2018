@@ -46,7 +46,7 @@ void set_threshold()
 	{
 		white_threshold = 255;
 	//detects only white
-	}else if(min_white>100 && range<80) {
+	}else if(min_white>100 && range<150) {
 		white_threshold = 0;
 	//mixed detection
 	}else{
@@ -69,7 +69,7 @@ bool check_red()
 	int r = get_pixel(120,160,0);
 	int g = get_pixel(120,160,1);
 	int b = get_pixel(120,160,2);
-	return (r>200 && g<100 && b<100);
+	return (r>180 && g<100 && b<100);
 }
 
 /**
@@ -110,7 +110,7 @@ double quadrant2_turn()
 		return NO_WHITE;
 	}
 	//all white pixels
-	if(white_pixels>317)
+	if(white_pixels>310)
     	{
         	if(DEBUG)
         	{
@@ -166,8 +166,8 @@ double quadrant3_turn() {
 	}
 
 	//whether all pixels on left or on right are white.
-	bool all_white_left = white_pixels_left > 130.0;
-	bool all_white_right = white_pixels_right > 130.0;
+	bool all_white_left = white_pixels_left > 155.0;
+	bool all_white_right = white_pixels_right > 155.0;
 	
 	//detects T intersection
 	if (all_white_left && all_white_right) {
@@ -253,6 +253,11 @@ double quadrant3_turn() {
 		if(DEBUG){
 			printf("Continuing forward\n");
 		}
+	}
+	
+	//go straight if a lot of white pixels
+	if(white_pixels_right + white_pixels_left > 200) {
+		return 0;
 	}
 	//reset variables
 	detectedIntersection = 0;

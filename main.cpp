@@ -3,9 +3,9 @@
 #include "img_process.h"
 #include <sys/time.h>
 
-double v_go=50;
-double left_bias = 1.15;
-double Kp=100;
+double v_go=120;
+double left_bias = 1;
+double Kp=120;
 int quadrant = 1;
 
 void turn(double);
@@ -35,10 +35,9 @@ int main()
 		sleep1(0,100);
     }
 	printf("quadrant3\n");
-	v_go = 30;
-	Kp = 50;
-	stop();
-	sleep1(0,300000);
+	v_go = 50;
+	Kp = 80;
+	
     while(quadrant == 3)
     {  
         quadrant3();
@@ -93,25 +92,28 @@ void quadrant3() {
     //If it sees no white - it is off course and will reverse
     if(amount==NO_WHITE)
     {
-        stop();
+        /*stop();
 	sleep1(0,300000);
 	set_motor(2,(int)(60.0*left_bias));
 	set_motor(1,-60);
-	sleep1(1,0);
+	sleep1(1,0);*/
+	reverse();
     }
 	//Turn left
 	else if(amount==LEFT)
 	{
+		sleep1(0,300000);
 		stop();
 		sleep1(0,300000);
-		turn(-0.65);
+		turn(-0.7);
 		sleep1(0,500000);
 	}
 	//Turn right
 	else if(amount==RIGHT) {
+		sleep1(0,300000);
 		stop();
 		sleep1(0,300000);
-        	turn(0.65);
+        	turn(0.7);
         	sleep1(0,500000);
 	
 	}
