@@ -38,32 +38,52 @@ void set_threshold()
 			min_white = white;
 		}
 	}
-	//threshold
-	int threshold = (max_white+min_white)/2;
+	//range
+	int range = max_white-min_white;
 	
-	if(max_white-min_white<50 || threshold>180 || threshold<80){
-		return;
+	//detects only black
+	if(max_white<120 && range<80)
+	{
+		white_threshold = 255;
+	//detects only white
+	}else if(min_white>100 && range<80) {
+		white_threshold = 0;
+	//mixed detection
+	}else{
+		white_threshold = (max_white+min_white)/2;
 	}
-	printf("%s\n",threshold);
-	white_threshold = threshold;
 	if(DEBUG)
 	{
 		printf("Thres: %d. Min=%d, Max=%d\n",white_threshold,min_white,max_white);
 	}
 }
 
-/**
- * This will return a value between -1 and 1 of where the white line is. 0 is the exact centre. 1 is all the way to right, -1 is all the way to left
- * */
-double get_turn()
+	
+/*
+* returns whether it can see red
+*/
+bool check_red()
 {
+	take_picture();
+	
+	int r = get_pixel(120,160,0);
+	int g = get_pixel(120,160,1);
+	int b = get_pixel(120,160,2);
+	return (r>150 && g<80 && b<80);
+}
+
+/**
+ * Quadrant 2
+ * */
+double quadrant2_turn()
+{
+	set_threshold();
 	
 	//get picture
     take_picture();
 	if(DEBUG){
 		printf("-----\n");
-}
-	
+	}
     int white_pixels = 0;
     double white_location = 0;
     
@@ -89,19 +109,15 @@ double get_turn()
 		}
 		return NO_WHITE;
 	}
+	//all white pixels
 	if(white_pixels>317)
-    {
-        if(DEBUG)
-        {
-            printf("all white\n");
-        }
-        return ALL_WHITE;
-    }
-	
-	//reset threshold
-	if(white_pixels>50 && white_pixels < 270) {
-		set_threshold();
-	}
+    	{
+        	if(DEBUG)
+        	{
+            		printf("all white\n");
+        	}
+        	return ALL_WHITE;
+    	}
 	//average location of the white pixels
 	double average_white_location = white_location/white_pixels;
 	
@@ -113,8 +129,14 @@ double get_turn()
 	return average_white_location;
 }
 
-
-double doScan() {
+/**
+* Quadrant 3
+*/
+double quadrant3_turn() {
+	set_threshold();
+	if(check_red()){
+		return RED;
+	}
 	take_picture();
 	
 	//calculate number of pixels on left side of screen and right
@@ -234,11 +256,8 @@ double doScan() {
 	}
 	//reset variables
 	detectedIntersection = 0;
-	//turn_value = NO_WHITE;
 	
-	//printf("following\n");
 	//Go forward
-	//printf("Forward\n");
 	double average_white_location = white_location / (white_pixels_right + white_pixels_left);
 	
 	return average_white_location;

@@ -9,7 +9,8 @@
 
 
 void set_threshold();
-double get_turn();
-double doScan();
+bool check_red();
+double quadrant2_turn();
+double quadrant3_turn();
 
 #endif
