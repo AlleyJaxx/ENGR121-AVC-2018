@@ -69,7 +69,7 @@ bool check_red()
 	int r = get_pixel(120,160,0);
 	int g = get_pixel(120,160,1);
 	int b = get_pixel(120,160,2);
-	return (r>150 && g<80 && b<80);
+	return (r>200 && g<100 && b<100);
 }
 
 /**
@@ -188,7 +188,7 @@ double quadrant3_turn() {
 				printf("Left intersect\n");
 			}
 		}else if(detectedIntersection==3){
-			detectedIntersection=2;
+			detectedIntersection=1;
 			if(DEBUG){
 				printf("T intersect\n");
 			}

@@ -26,7 +26,7 @@ int main()
     sleep1(0,500000);
     
     //quadrant 2
-	printf("quadrant2");
+	printf("quadrant2\n");
     quadrant = 2;
     
     while(quadrant == 2)
@@ -34,14 +34,17 @@ int main()
         quadrant2();
 		sleep1(0,100);
     }
-	printf("quadrant3");
-	Kp = 80;
+	printf("quadrant3\n");
+	v_go = 30;
+	Kp = 50;
+	stop();
+	sleep1(0,300000);
     while(quadrant == 3)
     {  
         quadrant3();
         sleep1(0,100);
     }
-	printf("quadrant4");
+	printf("quadrant4\n");
     stop(); 
 }
 
@@ -90,7 +93,11 @@ void quadrant3() {
     //If it sees no white - it is off course and will reverse
     if(amount==NO_WHITE)
     {
-        reverse();
+        stop();
+	sleep1(0,300000);
+	set_motor(2,(int)(60.0*left_bias));
+	set_motor(1,-60);
+	sleep1(1,0);
     }
 	//Turn left
 	else if(amount==LEFT)
