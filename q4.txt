@@ -68,6 +68,10 @@ turnRight();
 else if (front_sensor<= near_wall &&front_sensor!=0&&  left_sensor>=side_near_wall && right_sensor <=side_near_wall){
  turnLeft()
 }
+else if (front_sensor<= 50&&  left_sensor<=side_near_wall && right_sensor <=side_near_wall)
+{
+stop();
+}
 
 return 0;
 
