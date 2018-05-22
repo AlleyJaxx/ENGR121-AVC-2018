@@ -58,6 +58,19 @@ void set_threshold()
 	}
 }
 
+/**
+* returns whether or not white is in the centre
+*/
+bool wait_for_white_centre()
+{
+	set_threshold();
+
+	take_picture();
+
+	int white = get_pixel(120,160,3);
+	return white > white_threshold;
+}
+
 	
 /*
 * returns whether it can see red
@@ -109,6 +122,7 @@ double quadrant2_turn()
 		}
 		return NO_WHITE;
 	}
+	printf("%d\n",white_pixels);
 	//all white pixels
 	if(white_pixels>310)
     	{
@@ -118,6 +132,7 @@ double quadrant2_turn()
         	}
         	return ALL_WHITE;
     	}
+	
 	//average location of the white pixels
 	double average_white_location = white_location/white_pixels;
 	

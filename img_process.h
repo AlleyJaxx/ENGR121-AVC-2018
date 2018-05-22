@@ -12,5 +12,6 @@ void set_threshold();
 bool check_red();
 double quadrant2_turn();
 double quadrant3_turn();
+bool wait_for_white_centre();
 
 #endif

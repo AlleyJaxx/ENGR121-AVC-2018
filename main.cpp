@@ -99,22 +99,21 @@ void quadrant3() {
 	sleep1(1,0);*/
 	reverse();
     }
-	//Turn left
+	//Turn left - continue forward for 0.5s, turn left until white pixel in centre
 	else if(amount==LEFT)
 	{
-		sleep1(0,300000);
-		stop();
-		sleep1(0,300000);
-		turn(-0.7);
 		sleep1(0,500000);
+		while(!wait_for_white_centre()) {
+			turn(-0.7);
+			sleep1(0,100);
+		}
 	}
-	//Turn right
+	//Turn right - continue forward for 0.5s, turn right until white pixel in centre
 	else if(amount==RIGHT) {
-		sleep1(0,300000);
-		stop();
-		sleep1(0,300000);
-        	turn(0.7);
-        	sleep1(0,500000);
+		sleep1(0,500000);
+		while(!wait_for_white_centre()) {
+        		turn(0.7);
+		}
 	
 	}
 	//finish quadrant 3
