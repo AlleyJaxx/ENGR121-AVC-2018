@@ -1,2 +1,2 @@
-avc: main.cpp
-	g++ -o avc main.cpp -le101
+avc: *.cpp
+	g++ -o avc *.cpp -le101
