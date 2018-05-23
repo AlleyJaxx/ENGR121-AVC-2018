@@ -89,8 +89,8 @@ Thursday Week 2 - 10th – 16th May
                   to github. 
         - Kirsty: Developing networking code for quad 1 (opening first gate).
 
- ***Hardware - main components completed, just a few tweaks to be done with the camera and sensors by end of week 2.*** 
- ***Software - basic code dev (moving forward, left and right). Various codes committed to github.*** 
+     ***Hardware - main components completed, just a few tweaks to be done with the camera and sensors by end of week 2.*** 
+     ***Software - basic code dev (moving forward, left and right). Various codes committed to github.*** 
 
         Team meeting set for Fri 11/5 12-1pm and 2-3pm
 
@@ -140,6 +140,15 @@ Thursday Week 3 - 17th – 23rd May
     - Thomas: Main testing and debugging
     - Kirsty: Organise next meeting. Update progress and documentation in github. Check in on members progress.
     
+    Meeting #7: 17th May - In lab (1-3pm) CO145
+    Attended: Alex, Kirsty, Thomas, James - Apologies: Adam (sick)
+     - Hardware: 4th sensor to now be used. One more bracket needing to be 3D printed
+     - Kirsty & James started on quad 4 code.
+     - Thomas & Alex started on quad 3 code. 
+    
+      Up to date with progress target from week 2. 
+      Next meeting tomorrow fri 18th May from 2pm 
+
     Meeting #8: 18th May - 2pm onwards CO145
        Attended: Alex, Kirsty, Thomas, James - Apologies: Adam (lab)
          - Thomas and Alex: Worked on quad 3 code and testing. Managed to get the bot successfully through on multiple
