@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "E101.h"
+#include "quad4.h"
 
 void turn(double);
 void stop();
@@ -7,11 +8,9 @@ void stop();
 int main()
 {
     init();
-    turn(-0.5);
-    sleep1(3,0);
-    stop();
-   
-    
+    while(1){
+		quad4();
+	}
 }
 void turn(double amount){
     double v_go=50;

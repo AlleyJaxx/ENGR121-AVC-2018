@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "E101.h"
 #include "time.h"
+#include "quad4.h"
 
 //sensor
 int front_sensor;
@@ -14,8 +15,6 @@ int right_sensor_average;
 int near_wall =300;
 int side_near_wall=400;
 int sensor_threshold=1024;
-
-
 
 int sensorRead(){
 
@@ -76,47 +75,34 @@ void turnRightLittle(){
 
 } 
 
-
-
-
-int main(){
-	
- init();
- 
-
-if( front_sensor >= near_wall){
-
-if(right_sensor>left_sensor){
-	 turnRightLittle();
+void quad4(){
 	 
-	 }
-	 else if (right_sensor<left_sensor){
-		 turnLeftLittle();
+
+	if( front_sensor >= near_wall){
+
+	if(right_sensor>left_sensor){
+		 turnRightLittle();
 		 
 		 }
-		 else{
-			 goStraight(45);
+		 else if (right_sensor<left_sensor){
+			 turnLeftLittle();
+			 
 			 }
+			 else{
+				 goStraight(45);
+				 }
 
 
-}
-else if(  front_sensor<= near_wall && left_sensor<=side_near_wall && right_sensor >=side_near_wall){
+	}
+	else if(  front_sensor<= near_wall && left_sensor<=side_near_wall && right_sensor >=side_near_wall){
 
-turnRight();
-}
-else if (front_sensor<= near_wall &&  left_sensor>=side_near_wall && right_sensor <=side_near_wall){
- turnLeft();
-}
-else if (front_sensor<= 50&&  left_sensor<=side_near_wall && right_sensor <=side_near_wall)
-{
-stop();
-}
-
-return 0;
-
-
-
-
-
-
+	turnRight();
+	}
+	else if (front_sensor<= near_wall &&  left_sensor>=side_near_wall && right_sensor <=side_near_wall){
+	 turnLeft();
+	}
+	else if (front_sensor<= 50&&  left_sensor<=side_near_wall && right_sensor <=side_near_wall)
+	{
+	stop();
+	}
 }
