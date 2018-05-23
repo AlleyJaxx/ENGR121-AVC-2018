@@ -12,12 +12,14 @@ int left_sensor_average;
 int right_sensor_average;
 
 //sensor value
-int near_wall =300;
-int side_near_wall=400;
-int sensor_threshold=1024;
+const int near_wall =250;
+const int side_near_wall=400;
+const int hug_right_threshold=610;
 
 int sensorRead(){
-
+	front_sensor = 0;
+	left_sensor = 0;
+	right_sensor = 0;
     for(int i=0;i<5;i++){
 	front_sensor = front_sensor + read_analog(0);
     left_sensor = left_sensor + read_analog(1);
@@ -31,16 +33,7 @@ int sensorRead(){
 
 }
 
-void goStraight(int speed){
-    set_motor(1,(int)speed);   
-    set_motor(2,(int)speed);
-    sleep1(0,500);
-} 
 
-void stop(){
-    set_motor(1,0);
-    set_motor(2,0);
-}
 void turnLeft(){
 	set_motor(1,60);
   set_motor(2,-60);
@@ -56,53 +49,36 @@ void turnRight(){
 	
 	}
 
-//Turn left a little
-void turnLeftLittle(){ 
-  set_motor(1,30);
-  set_motor(2,-30);
-  sleep1(0,200000);
-	stop(); 
-
-} 
-
-
-//Turn right little
-void turnRightLittle(){ 
-  set_motor(1,-30);
-  set_motor(2,30);
-  sleep1(0,200000);
-	stop();
-
-} 
-
-void quad4(){
+double quad4(){
 	 
 
-	if( front_sensor >= near_wall){
-
-	if(right_sensor>left_sensor){
-		 turnRightLittle();
-		 
-		 }
-		 else if (right_sensor<left_sensor){
-			 turnLeftLittle();
-			 
-			 }
-			 else{
-				 goStraight(45);
-				 }
+	if( front_sensor_average >= near_wall){
+		
+		//hug right
+		if(right_sensor_average>side_near_wall) {
+			double error = hug_right_threshold-right_sensor_average;//difference between right and threshold. negative means needs to turn left
+			return error/600.0;//600 is some random value to make the error similar to between -1 and 1. Might not be accurate though.
+		}
+		//if no right hug left
+		else if(left_sensor_average>side_near_wall) {
+			double error = left_sensor_average-hug_right_threshold;//difference between threshold and left. negative means needs to turn left
+			return error/600.0;//600 is some random value to make the error similar to between -1 and 1. Might not be accurate though.
+		//if no walls go straight
+		}else{
+			return 0;
+		}
 
 
 	}
-	else if(  front_sensor<= near_wall && left_sensor<=side_near_wall && right_sensor >=side_near_wall){
+	else if(  front_sensor_average<= near_wall && left_sensor_average<=side_near_wall && right_sensor_average >=side_near_wall){
 
-	turnRight();
+		return RIGHT;
 	}
-	else if (front_sensor<= near_wall &&  left_sensor>=side_near_wall && right_sensor <=side_near_wall){
-	 turnLeft();
+	else if (front_sensor_average<= near_wall &&  left_sensor_average>=side_near_wall && right_sensor_average <=side_near_wall){
+	 return LEFT;
 	}
-	else if (front_sensor<= 50&&  left_sensor<=side_near_wall && right_sensor <=side_near_wall)
+	else if (front_sensor_average<= 50&&  left_sensor_average<=side_near_wall && right_sensor_average <=side_near_wall)
 	{
-	stop();
+	return STOP;
 	}
 }

@@ -1,22 +1,17 @@
 #ifndef QUAD4_H
 #define QUAD4_H
 
+#define LEFT 12
+#define RIGHT 13
+#define RED 14
+#define STOP 15
+
 int sensorRead();
 
-void goStraight(int); 
-
-void stop();
 void turnLeft();
 
 void turnRight();
 
-//Turn left a little
-void turnLeftLittle();
-
-
-//Turn right little
-void turnRightLittle();
-
-void quad4();
+double quad4();
 
 #endif
