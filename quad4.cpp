@@ -3,10 +3,7 @@
 #include "time.h"
 #include "quad4.h"
 
-//sensor
-double front_sensor;
-double left_sensor;
-double right_sensor;
+//bools
 bool gateDown=false;
 bool gate_down=false;
 bool seen_gate=false;
@@ -14,13 +11,7 @@ bool seen_gate=false;
 const double near_wall =250;
 const double side_near_wall=400;
 const double hug_right_threshold=610;
-
-int sensorRead() {
-	front_sensor = (double)read_analog(0);
-	left_sensor = (double)read_analog(1);
-	right_sensor = (double)read_analog(2);
-}
-
+bool DEBUG = true;
     
 bool check_red()
 {
@@ -31,31 +22,16 @@ bool check_red()
 	int b = get_pixel(120,160,2);
 	return (r>225 && g<150 && b<150);
 }
-
-void turnLeft(){
-	set_motor(1,0);
-	set_motor(2,0);
-	sleep1(1,0);
-	set_motor(1,60);
-  set_motor(2,-60);
-  sleep1(2,0);
-	 
-	}
-
-void turnRight(){
-	set_motor(1,0);
-	set_motor(2,0);
-	sleep1(1,0);
-	set_motor(1,-60);
-  	set_motor(2,60);
-  	sleep1(2,0);
-	
-	
-	}
 	
 
 double quad4(){
-   
+    double front_sensor = (double)read_analog(0);
+	double left_sensor = (double)read_analog(1);
+	double right_sensor = (double)read_analog(2);
+    if(DEBUG) {
+        printf("%f,%f,%f\n",front_sensor,right_sensor,left_sensor);
+    }
+    //wait at gate
     if(check_red() && !seen_gate){ 
         if(front_sensor>300){
             gate_down=true;
@@ -71,27 +47,52 @@ double quad4(){
             }
         }
     }
-	 printf("%f,%f,%f\n",front_sensor,right_sensor,left_sensor);
-	sensorRead();
-	if( front_sensor <= near_wall){
-		
-		//hug right
-		//if(right_sensor>250 && left_sensor>250) {
+    
+    //ok to go forward
+    if( front_sensor <= near_wall){
+		//both sensors present - stay in middle
+		if(right_sensor>side_near_wall && left_sensor>side_near_wall) {
 			double error = left_sensor-right_sensor;//difference between right and left. negative means needs to turn left
 			printf("STRAIGHT: %f,%f\n",right_sensor,error);
 			error/=100.0;
 			
 			if(error>1){error=1;}
 			if(error<-1){error=-1;}
-			return error;//600 is some random value to make the error similar to between -1 and 1. Might not be accurate though.
-		//if no walls go straight
-		//}else{
-		//	return 0;
-		//}
-
-
+			return error;
+        //only sees right wall
+        }else if(right_sensor>side_near_wall) {
+            double error = hug_right_threshold-right_sensor;
+            printf("STRAIGHT: %f,%f\n",right_sensor,error);
+			error/=100.0;
+			
+			if(error>1){error=1;}
+			if(error<-1){error=-1;}
+			return error;
+        //only sees left wall
+        }else if(left_sensor>side_near_wall) {
+            double error = left_sensor-hug_right_threshold;
+            printf("STRAIGHT: %f,%f\n",right_sensor,error);
+			error/=100.0;
+			
+			if(error>1){error=1;}
+			if(error<-1){error=-1;}
+			return error;
+        }else{
+            return 0;
+        }
 	}
+	//detects wall in front
 	else {
-		return STOP;
-	}
+        //right or T turn
+        if(right_sensor<side_near_wall) {
+            return RIGHT;
+        }
+        //left turn
+        else if(left_sensor<side_near_wall) {
+            return LEFT;
+        //stop (dead end)
+        }else{
+            return STOP;
+        }
+    }
 }

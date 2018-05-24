@@ -6,12 +6,7 @@
 #define STOP 15
 #define GATE 16
 
-int sensorRead();
-
-void turnLeft();
-
-void turnRight();
-
+bool check_red();
 double quad4();
 
 #endif

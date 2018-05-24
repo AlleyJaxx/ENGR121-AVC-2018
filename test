@@ -1,0 +1,16 @@
+Morning test (lighting conditions mostly constant):
+
+BLACK ONLY:
+
+Max: ~100
+Range: ~50
+
+BLACK AND WHITE:
+
+Max: 170
+Min: 30
+Range always >100
+
+WHITE ONLY:
+Min: 100
+Range: ~30

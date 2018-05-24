@@ -31,10 +31,10 @@ void quadrant4() {
 		running = false;
 	}else if(amount==LEFT) {
 		printf("LEFT\n");
-		turnLeft();
+		turn(-0.5);
 	}else if(amount==RIGHT) {
 		printf("RIGHT\n");
-		turnRight();
+		turn(0.5);
     }else if(amount==GATE) {
 	printf("GATE\n");
         stop();
