@@ -9,7 +9,7 @@ bool gate_down=false;
 bool seen_gate=false;
 //sensor value
 const double near_wall =250;
-const double side_near_wall=400;
+const double side_near_wall=500;
 const double hug_right_threshold=610;
 bool DEBUG = true;
     
@@ -54,7 +54,7 @@ double quad4(){
 		if(right_sensor>side_near_wall && left_sensor>side_near_wall) {
 			double error = left_sensor-right_sensor;//difference between right and left. negative means needs to turn left
 			printf("STRAIGHT: %f,%f\n",right_sensor,error);
-			error/=100.0;
+			error/=500.0;
 			
 			if(error>1){error=1;}
 			if(error<-1){error=-1;}
@@ -63,7 +63,7 @@ double quad4(){
         }else if(right_sensor>side_near_wall) {
             double error = hug_right_threshold-right_sensor;
             printf("STRAIGHT: %f,%f\n",right_sensor,error);
-			error/=100.0;
+			error/=500.0;
 			
 			if(error>1){error=1;}
 			if(error<-1){error=-1;}
@@ -72,7 +72,7 @@ double quad4(){
         }else if(left_sensor>side_near_wall) {
             double error = left_sensor-hug_right_threshold;
             printf("STRAIGHT: %f,%f\n",right_sensor,error);
-			error/=100.0;
+			error/=500.0;
 			
 			if(error>1){error=1;}
 			if(error<-1){error=-1;}
@@ -83,16 +83,11 @@ double quad4(){
 	}
 	//detects wall in front
 	else {
-        //right or T turn
-        if(right_sensor<side_near_wall) {
-            return RIGHT;
-        }
-        //left turn
-        else if(left_sensor<side_near_wall) {
-            return LEFT;
-        //stop (dead end)
-        }else{
-            return STOP;
-        }
+        	if(right_sensor>left_sensor) {
+			return LEFT;
+		}
+		else {
+			return RIGHT;
+		}
     }
 }

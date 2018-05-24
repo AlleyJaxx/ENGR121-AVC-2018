@@ -3,7 +3,7 @@
 #include "quad4.h"
 double v_go=30;
 double left_bias = 1;
-double Kp=10;
+double Kp=50;
 
 void turn(double);
 void stop();
@@ -17,7 +17,7 @@ int main()
     init();
     while(running){
 	quadrant4();
-	sleep1(0,1000);
+	sleep1(0,100);
 	}
 	stop();
 	return 0;
@@ -31,10 +31,10 @@ void quadrant4() {
 		running = false;
 	}else if(amount==LEFT) {
 		printf("LEFT\n");
-		turn(-0.5);
+		turn(-2);
 	}else if(amount==RIGHT) {
 		printf("RIGHT\n");
-		turn(0.5);
+		turn(2);
     }else if(amount==GATE) {
 	printf("GATE\n");
         stop();
