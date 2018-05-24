@@ -10,7 +10,9 @@ int right_sensor;
 int front_sensor_average;
 int left_sensor_average;
 int right_sensor_average;
-
+bool gateDown=false;
+bool gate_down=false;
+bool seen_gate=false;
 //sensor value
 const int near_wall =250;
 const int side_near_wall=400;
@@ -33,6 +35,16 @@ int sensorRead(){
 
 }
 
+    
+bool check_red()
+{
+	take_picture();
+	
+	int r = get_pixel(120,160,0);
+	int g = get_pixel(120,160,1);
+	int b = get_pixel(120,160,2);
+	return (r>225 && g<150 && b<150);
+}
 
 void turnLeft(){
 	set_motor(1,60);
@@ -48,8 +60,25 @@ void turnRight(){
 	stop();
 	
 	}
+	
 
 double quad4(){
+   
+    if(check_red() && !seen_gate){ 
+        if(front_sensor>300){
+            gate_down=true;
+            return GATE;
+            
+        }
+        else{
+            if(gate_down=true){
+                seen_gate = true; 
+            
+            }else{
+                return GATE;
+            }
+        }
+    }
 	 
 
 	if( front_sensor_average >= near_wall){

@@ -29,11 +29,13 @@ void quadrant4() {
 		turnLeft();
 	}else if(amount==RIGHT) {
 		turnRight();
+    }else if(amount==GATE) {
+        stop();
 	}else {
 		turn(amount);
 	}
+	
 }
-
 /**
  * Turns the robot
  * */
