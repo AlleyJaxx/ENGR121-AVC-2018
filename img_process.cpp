@@ -5,7 +5,20 @@
 int white_threshold = 127;
 int detectedIntersection = 0;
 int timer = 0;
-bool DEBUG = false;
+bool DEBUG = true;
+
+int count_white_test()
+{
+	set_threshold();
+	take_picture();
+	int y = 120;
+	int white_pixels = 0;
+	for(int x = 0; x<320; x++){
+		int white = get_pixel(120,x,3);
+		if(white>white_threshold){white_pixels++;}
+	}
+	return white_pixels;
+}
 
 /**
 * Sets the threshold value for checking white
@@ -124,7 +137,7 @@ double quadrant2_turn()
 	}
 	printf("%d\n",white_pixels);
 	//all white pixels
-	if(white_pixels>310)
+	if(white_pixels>300)
     	{
         	if(DEBUG)
         	{
@@ -271,9 +284,9 @@ double quadrant3_turn() {
 	}
 	
 	//go straight if a lot of white pixels
-	if(white_pixels_right + white_pixels_left > 200) {
+	/*if(white_pixels_right + white_pixels_left > 200) {
 		return 0;
-	}
+	}*/
 	//reset variables
 	detectedIntersection = 0;
 	

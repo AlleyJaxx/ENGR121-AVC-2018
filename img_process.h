@@ -7,7 +7,7 @@
 #define RIGHT 13
 #define RED 14
 
-
+int count_white_test();
 void set_threshold();
 bool check_red();
 double quadrant2_turn();
