@@ -3,9 +3,9 @@
 #include "img_process.h"
 #include <sys/time.h>
 
-double v_go=80;
+double v_go=50;
 double left_bias = 1;
-double Kp=120;
+double Kp=70;
 int quadrant = 1;
 
 void turn(double);
@@ -21,6 +21,7 @@ int main()
 	init();
 	/*while(1){
 		printf("%d\n",count_white_test());
+		set_threshold();
 	}*/
     //quadrant 1
     openGate();
@@ -28,7 +29,7 @@ int main()
     sleep1(0,500000);
     
     //quadrant 2
-	printf("quadrant2\n");
+    printf("quadrant2\n");
     quadrant = 2;
     
     while(quadrant == 2)
@@ -37,8 +38,6 @@ int main()
 		sleep1(0,100);
     }
 	printf("quadrant3\n");
-	v_go = 50;
-	Kp = 50;
 	
     while(quadrant == 3)
     {  
@@ -76,13 +75,11 @@ void quadrant2() {
     //If it sees no white - it is off course and will reverse
     else if(amount==NO_WHITE)
     {
-	v_go = 50;
         reverse();
     }
     //Otherwise - turn based on the amount given
     else
     {
-	v_go = 100;
         turn(amount);
     }
 }
@@ -101,12 +98,18 @@ void quadrant3() {
 	set_motor(2,(int)(60.0*left_bias));
 	set_motor(1,-60);
 	sleep1(1,0);*/
-	reverse();
+	sleep1(0,150000);
+	stop();
+	sleep1(0,300000);
+	while(!wait_for_white_centre()) {
+		turn(0.7);
+		sleep1(0,100);
+	}
     }
 	//Turn left - continue forward for 0.5s, turn left until white pixel in centre
 	else if(amount==LEFT)
 	{
-		sleep1(0,300000);
+		sleep1(0,150000);
 		stop();
 		sleep1(0,300000);
 		while(!wait_for_white_centre()) {
@@ -116,6 +119,8 @@ void quadrant3() {
 	}
 	//Turn right - continue forward for 0.5s, turn right until white pixel in centre
 	else if(amount==RIGHT) {
+		sleep1(0,150000);
+		stop();
 		sleep1(0,300000);
 		while(!wait_for_white_centre()) {
         		turn(0.7);

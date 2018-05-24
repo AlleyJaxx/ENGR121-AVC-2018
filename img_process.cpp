@@ -5,7 +5,7 @@
 int white_threshold = 127;
 int detectedIntersection = 0;
 int timer = 0;
-bool DEBUG = true;
+bool DEBUG = false;
 
 int count_white_test()
 {
@@ -106,7 +106,6 @@ double quadrant2_turn()
 	set_threshold();
 	
 	//get picture
-    take_picture();
 	if(DEBUG){
 		printf("-----\n");
 	}
@@ -165,7 +164,6 @@ double quadrant3_turn() {
 	if(check_red()){
 		return RED;
 	}
-	take_picture();
 	
 	//calculate number of pixels on left side of screen and right
 	int white_pixels_left = 0;
@@ -275,7 +273,7 @@ double quadrant3_turn() {
 	if(detectedIntersection!=0){
 		timer++;
 		//n checks before it continues following the line.
-		if(timer<20) {
+		if(timer<10) {
 			return 0;
 		}
 		if(DEBUG){
@@ -284,9 +282,9 @@ double quadrant3_turn() {
 	}
 	
 	//go straight if a lot of white pixels
-	/*if(white_pixels_right + white_pixels_left > 200) {
+	if(white_pixels_right + white_pixels_left > 200) {
 		return 0;
-	}*/
+	}
 	//reset variables
 	detectedIntersection = 0;
 	
