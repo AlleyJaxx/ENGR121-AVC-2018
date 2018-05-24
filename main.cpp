@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include "E101.h"
 #include "quad4.h"
-double v_go=120;
+double v_go=30;
 double left_bias = 1;
-double Kp=120;
+double Kp=10;
 
 void turn(double);
 void stop();
@@ -16,22 +16,30 @@ int main()
 {
     init();
     while(running){
-		quadrant4();
+	quadrant4();
+	sleep1(0,1000);
 	}
 	stop();
+	return 0;
 }
 
 void quadrant4() {
 	double amount = quad4();
+	//printf("%f\n",amount);
 	if(amount==STOP) {
+		printf("STOP\n");
 		running = false;
 	}else if(amount==LEFT) {
+		printf("LEFT\n");
 		turnLeft();
 	}else if(amount==RIGHT) {
+		printf("RIGHT\n");
 		turnRight();
     }else if(amount==GATE) {
+	printf("GATE\n");
         stop();
 	}else {
+		printf("TURN:%f\n",amount);
 		turn(amount);
 	}
 	
