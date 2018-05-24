@@ -6,6 +6,8 @@
 #define LEFT 12
 #define RIGHT 13
 #define RED 14
+#define GATE 15
+#define END 16
 
 int count_white_test();
 void set_threshold();

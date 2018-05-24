@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include "E101.h"
 #include "img_process.h"
+#include "quad4.h"
 #include <sys/time.h>
 
 double v_go=50;
-double left_bias = 1;
 double Kp=70;
 int quadrant = 1;
 
@@ -14,6 +14,7 @@ void stop();
 void openGate();
 void quadrant2();
 void quadrant3();
+void quadrant4();
 
 int main()
 {
@@ -45,6 +46,12 @@ int main()
         sleep1(0,100);
     }
 	printf("quadrant4\n");
+	while(quadrant == 4)
+	{
+		quadrant4();
+		sleep1(0,100);
+	}
+	printf("end\n");
     stop();
 }
 
@@ -85,7 +92,7 @@ void quadrant2() {
 }
 
 /**
- * Line following quadrant
+ * Line maze quadrant
  */
 void quadrant3() {
     double amount = quadrant3_turn();
@@ -140,10 +147,33 @@ void quadrant3() {
 }
 
 /**
+* Walled maze quadrant
+*/
+void quadrant4() {
+	double amount = quadrant4_turn();
+	//detects end?
+	if(amount==STOP) {
+		quadrant = 5;
+	//left
+	}else if(amount==LEFT) {
+		turn(-2);
+	//right
+	}else if(amount==RIGHT) {
+		turn(2);
+	//wait at the gate
+    }else if(amount==GATE) {
+        stop();
+	//straight
+	}else {
+		turn(amount);
+	}
+}
+
+/**
  * Turns the robot
  * */
 void turn(double amount){
-    int left= (int)((v_go+Kp*amount)*left_bias);
+    int left= (int)(v_go+Kp*amount);
     int right= (int)(v_go-Kp*amount);
     set_motor(2,left);
     set_motor(1,right);
@@ -153,8 +183,8 @@ void turn(double amount){
  * Makes the robot go in reverse
  * */
 void reverse() {
-    int left = -(v_go*left_bias);
-    int right = -(v_go);
+    int left = -v_go;
+    int right = -v_go;
 
     set_motor(2,left);
     set_motor(1,right);
