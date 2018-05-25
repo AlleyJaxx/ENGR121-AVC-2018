@@ -74,14 +74,16 @@ void set_threshold()
 /**
 * returns whether or not white is in the centre
 */
-bool wait_for_white_centre()
+bool wait_for_white_centre(int off)
 {
 	set_threshold();
-
-	take_picture();
-
-	int white = get_pixel(120,160,3);
-	return white > white_threshold;
+	
+	int white_pixels = 0;
+	for(int i = 140+off;i<180+off;i++){
+		int white = get_pixel(120,i,3);
+		if(white>white_threshold){white_pixels++;}
+	}
+	return white_pixels>10;
 }
 
 	

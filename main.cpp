@@ -9,7 +9,7 @@ double Kp=70;
 int quadrant = 1;
 
 void turn(double);
-void reverse();
+void reverse(double);
 void stop();
 void openGate();
 void quadrant2();
@@ -36,7 +36,7 @@ int main()
     while(quadrant == 2)
     {
         quadrant2();
-		sleep1(0,100);
+	sleep1(0,100);
     }
 	printf("quadrant3\n");
 	
@@ -45,6 +45,8 @@ int main()
         quadrant3();
         sleep1(0,100);
     }
+	v_go = 30;
+	Kp = 50;
 	printf("quadrant4\n");
 	while(quadrant == 4)
 	{
@@ -82,7 +84,7 @@ void quadrant2() {
     //If it sees no white - it is off course and will reverse
     else if(amount==NO_WHITE)
     {
-        reverse();
+        reverse(0);
     }
     //Otherwise - turn based on the amount given
     else
@@ -108,10 +110,11 @@ void quadrant3() {
 	sleep1(0,150000);
 	stop();
 	sleep1(0,300000);
-	while(!wait_for_white_centre()) {
-		turn(0.7);
-		sleep1(0,100);
+	while(!wait_for_white_centre(60)) {
+		turn(0.5);
 	}
+	stop();
+	sleep1(0,300000);
     }
 	//Turn left - continue forward for 0.5s, turn left until white pixel in centre
 	else if(amount==LEFT)
@@ -119,20 +122,22 @@ void quadrant3() {
 		sleep1(0,150000);
 		stop();
 		sleep1(0,300000);
-		while(!wait_for_white_centre()) {
-			turn(-0.7);
-			sleep1(0,100);
+		while(!wait_for_white_centre(-60)) {
+			turn(-0.5);
 		}
+		stop();
+		sleep1(0,300000);
 	}
 	//Turn right - continue forward for 0.5s, turn right until white pixel in centre
 	else if(amount==RIGHT) {
 		sleep1(0,150000);
 		stop();
 		sleep1(0,300000);
-		while(!wait_for_white_centre()) {
-        		turn(0.7);
+		while(!wait_for_white_centre(60)) {
+        		turn(0.5);
 		}
-	
+		stop();
+		sleep1(0,300000);
 	}
 	//finish quadrant 3
 	else if(amount==RED)
@@ -156,17 +161,34 @@ void quadrant4() {
 		quadrant = 5;
 	//left
 	}else if(amount==LEFT) {
-		turn(-2);
+		turn(-1.2);
 	//right
 	}else if(amount==RIGHT) {
-		turn(2);
+		turn(1.2);
 	//wait at the gate
     }else if(amount==GATE) {
         stop();
+	}else if(amount==LEFT_STUCK) {
+		stop();
+		printf("stuckl\n");
+		sleep1(1,0);
+		reverse(-1);
+		sleep1(1,0);
+		reverse(1);
+		sleep1(1,0);
+	}else if(amount==RIGHT_STUCK) {
+		stop();
+		printf("stuckr\n");
+		sleep1(1,0);
+		reverse(1);
+		sleep1(1,0);
+		reverse(-1);
+		sleep1(1,0);
 	//straight
 	}else {
 		turn(amount);
 	}
+	
 }
 
 /**
@@ -182,9 +204,9 @@ void turn(double amount){
 /**
  * Makes the robot go in reverse
  * */
-void reverse() {
-    int left = -v_go;
-    int right = -v_go;
+void reverse(double amount) {
+    int left = -(int)(v_go+Kp*amount);
+    int right = -(int)(v_go-Kp*amount);
 
     set_motor(2,left);
     set_motor(1,right);

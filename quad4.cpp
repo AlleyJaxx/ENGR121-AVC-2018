@@ -7,11 +7,14 @@
 bool gateDown=false;
 bool gate_down=false;
 bool seen_gate=false;
+
+int low_left = 0;
+int low_right = 0;
 //sensor value
-const double near_wall =250;
+const double near_wall =210;
 const double side_near_wall=500;
-const double hug_right_threshold=610;
-bool DEBUG2 = true;
+const double hug_right_threshold=550;
+bool DEBUG2 = false;
     
 bool check_red2()
 {
@@ -46,11 +49,25 @@ double quadrant4_turn(){
             }
         }
     }
+	if(left_sensor<50) {
+		low_left++;
+	}else if(right_sensor<50) {
+		low_right++;
+	}else{
+		low_left=0;
+		low_right=0;
+	}
+	if(low_left>100){
+		return LEFT_STUCK;
+	}
+	else if(low_right>100){
+		return RIGHT_STUCK;
+	}
     
     //ok to go forward
     if( front_sensor <= near_wall){
 		//both sensors present - stay in middle
-		if(right_sensor>side_near_wall && left_sensor>side_near_wall) {
+		/*if(right_sensor>side_near_wall && left_sensor>side_near_wall) {
 			double error = left_sensor-right_sensor;//difference between right and left. negative means needs to turn left
 			if(DEBUG2) {
 				printf("STRAIGHT: %f,%f\n",right_sensor,error);
@@ -61,7 +78,7 @@ double quadrant4_turn(){
 			if(error<-1){error=-1;}
 			return error;
         //only sees right wall
-        }else if(right_sensor>side_near_wall) {
+        }else*/ if(right_sensor>side_near_wall) {
             double error = hug_right_threshold-right_sensor;
             if(DEBUG2) {
 				printf("STRAIGHT: %f,%f\n",right_sensor,error);
