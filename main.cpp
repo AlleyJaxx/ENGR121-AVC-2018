@@ -168,22 +168,8 @@ void quadrant4() {
 	//wait at the gate
     }else if(amount==GATE) {
         stop();
-	}else if(amount==LEFT_STUCK) {
-		stop();
-		printf("stuckl\n");
-		sleep1(1,0);
-		reverse(-1);
-		sleep1(1,0);
-		reverse(1);
-		sleep1(1,0);
-	}else if(amount==RIGHT_STUCK) {
-		stop();
-		printf("stuckr\n");
-		sleep1(1,0);
-		reverse(1);
-		sleep1(1,0);
-		reverse(-1);
-		sleep1(1,0);
+	}else if(amount==STUCK) {
+        reverse(0);
 	//straight
 	}else {
 		turn(amount);

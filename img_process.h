@@ -8,8 +8,7 @@
 #define RED 14
 #define GATE 15
 #define STOP 16
-#define LEFT_STUCK 17
-#define RIGHT_STUCK 18
+#define STUCK 17
 
 int count_white_test();
 void set_threshold();
