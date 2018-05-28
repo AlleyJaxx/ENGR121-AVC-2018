@@ -156,32 +156,31 @@ void quadrant3() {
 */
 void quadrant4() {
 	double amount = quadrant4_turn();
-	//detects end?
-	if(amount==STOP) {
-		quadrant = 5;
+	
 	//left
-	}else if(amount==LEFT) {
+	if(amount==LEFT) {
 		turn(-1.2);
 	//right
 	}else if(amount==RIGHT) {
 		turn(1.2);
-	//wait at the gate
-   	 }else if(amount==GATE) {
+	//wait at the gate - wait 2.5s before stopping
+   	}else if(amount==GATE) {
 		turn(0);
 		sleep1(2,500000);
-        	stop();
+        stop();
+	//stuck - reverse
 	}else if(amount==STUCK) {
-        	reverse(0);
+        reverse(0);
 		int wallDetect = waitForWallDetect();
 		while(wallDetect==0) {
 			sleep1(0,100);
 			wallDetect = waitForWallDetect();
 		}
 		if(wallDetect==1) {
-			reverse(0.5);
+			reverse(0.2);
 			sleep1(0,300000);
 		}else if(wallDetect==-1){
-			reverse(-0.5);
+			reverse(-0.2);
 			sleep1(0,300000);
 		}
 	//straight
