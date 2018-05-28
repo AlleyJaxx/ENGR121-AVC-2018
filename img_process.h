@@ -9,6 +9,7 @@
 #define GATE 15
 #define STOP 16
 #define STUCK 17
+#define WAIT 18
 
 int count_white_test();
 void set_threshold();
