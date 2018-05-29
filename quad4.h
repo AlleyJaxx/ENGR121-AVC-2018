@@ -4,7 +4,6 @@
 bool check_red2();
 double quadrant4_turn();
 void sensor_read();
-void calc_sensor(double*,double*,int);
 int waitForWallDetect();
 
 #endif

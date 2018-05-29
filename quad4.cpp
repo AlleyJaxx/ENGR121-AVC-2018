@@ -2,6 +2,7 @@
 #include "E101.h"
 #include "time.h"
 #include "img_process.h"
+#include "quad4.h"
 #include <list>
 
 //checking variables
@@ -9,23 +10,20 @@ bool gate_down = false;
 bool seen_gate = false;
 bool wait_gate = false;
 int frames = 0;
-std::list<double> left_check = {};
-std::list<double> right_check = {};
-std::list<double> forward_check = {};
+std::list<double> left_check;
+std::list<double> right_check;
+std::list<double> forward_check;
 
 //sensors
 double front_sensor;
 double left_sensor;
 double right_sensor;
-double front_noise;
-double left_noise;
-double right_noise;
 
 //sensor value
 const double near_wall =210;
-const double side_near_wall=300;
-const double hug_right_threshold=500;
-bool DEBUG2 = true;
+const double side_near_wall=400;
+const double hug_right_threshold=550;
+bool DEBUG2 = false;
    
 /**
 * Used for getting the robot unstuck
@@ -33,9 +31,9 @@ bool DEBUG2 = true;
 int waitForWallDetect() {
 	sensor_read();
 
-	if(right_sensor>400) {
+	if(right_sensor>450) {
 		return 1;
-	}else if(left_sensor>400) {
+	}else if(left_sensor>450) {
 		return -1;
 	}else{
 		return 0;
@@ -63,31 +61,14 @@ bool check_red2()
 	return false;
 }
 
-/**
-* Calculates the values of a sensor
-*/
-void calc_sensor(double* sensor, double* noise, int read)
-{
-	double min = 1024;
-	double max = 0;
-	double total = 0;
-	for(int i = 0;i<10;i++) {
-		double reading = (double)read_analog(read);
-		total+=reading;
-		if(reading>max) max = reading;
-		if(reading<min) min = reading;
-	}
-	
-	*sensor = total/10.0;
-	*noise = max-min;
-}
+
 /**
 * Reads the values in all the sensors
 */
 void sensor_read() {
-	calc_sensor(&front_sensor,&front_noise, 0);
-	calc_sensor(&right_sensor,&right_noise, 2);
-	calc_sensor(&left_sensor,&left_noise, 1);	
+	front_sensor = (double)read_analog(0);
+	left_sensor = (double)read_analog(1);
+	right_sensor = (double)read_analog(2);
 }
 
 /**
@@ -96,13 +77,14 @@ void sensor_read() {
 bool checkIfStuck() {
 	left_check.push_back(left_sensor);
 	right_check.push_back(right_sensor);
-	forward_check.push_back(forward_sensor);
-	if(left_check.size()>100) {
+	forward_check.push_back(front_sensor);
+	printf("%d\n",left_check.size());
+	if(left_check.size()>30) {
 		left_check.pop_front();
 		right_check.pop_front();
 		forward_check.pop_front();
 		
-		std::list<int>::iterator it;
+		std::list<double>::iterator it;
 		
 		//left sensor check
 		//double left = 0;
@@ -139,8 +121,8 @@ bool checkIfStuck() {
 			if(value>forward_max) forward_max = value;
 		}
 		double forward_range = forward_max-forward_min;
-		
-		return(left_range < 90 && right_range < 90 && forward_range < 90);
+		printf("%f,%f,%f\n",left_range,right_range,forward_range);
+		return(left_range < 90 && right_range < 90 && forward_range < 90 && front_sensor>100 && left_sensor<400 && right_sensor<400);
 	}
 	return false;
 }
@@ -151,11 +133,11 @@ bool checkIfStuck() {
 double quadrant4_turn(){
     sensor_read();
     if(DEBUG2) {
-        printf("%f,%f | %f,%f | %f,%f\n",front_sensor,front_noise,left_sensor,left_noise,right_sensor,right_noise);
+        printf("%f | %f | %f\n",front_sensor,left_sensor,right_sensor);
     }
 	frames++;
     //wait at gate
-    if((check_red2() || wait_gate) &&  !seen_gate && frames>200){
+    if((check_red2() || wait_gate) &&  !seen_gate && frames>100){
 		if(!wait_gate) {
 			wait_gate = true;
 			if(DEBUG2) {
@@ -185,6 +167,7 @@ double quadrant4_turn(){
 	if(checkIfStuck()) {
 		return STUCK;
 	}
+	
 	
     //ok to go forward
     if( front_sensor <= near_wall){
@@ -218,7 +201,7 @@ double quadrant4_turn(){
 	}
 	//detects wall in front
 	else {
-	double value = (double)front_sensor/500.0;
+	double value = (double)front_sensor/450.0;
         if(right_sensor>left_sensor) {
 			return -value;
 		}

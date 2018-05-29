@@ -31,7 +31,7 @@ int main()
     
     //quadrant 2
     printf("quadrant2\n");
-    quadrant = 3;
+    quadrant = 4;
     
     while(quadrant == 2)
     {
@@ -177,11 +177,11 @@ void quadrant4() {
 			wallDetect = waitForWallDetect();
 		}
 		if(wallDetect==1) {
-			reverse(0.2);
-			sleep1(0,300000);
+			reverse(0.5);
+			sleep1(0,400000);
 		}else if(wallDetect==-1){
-			reverse(-0.2);
-			sleep1(0,300000);
+			reverse(-0.5);
+			sleep1(0,400000);
 		}
 	//straight
 	}else if(amount!=WAIT){
