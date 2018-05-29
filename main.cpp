@@ -21,8 +21,8 @@ int main()
     //test - just makes it go forward for 2 secs
 	init();
 	/*while(1){
-		printf("%d\n",count_white_test());
 		set_threshold();
+		printf("%d\n",count_white_test());
 	}*/
     //quadrant 1
     openGate();
@@ -31,7 +31,7 @@ int main()
     
     //quadrant 2
     printf("quadrant2\n");
-    quadrant = 4;
+    quadrant = 2;
     
     while(quadrant == 2)
     {

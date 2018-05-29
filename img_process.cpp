@@ -55,11 +55,11 @@ void set_threshold()
 	int range = max_white-min_white;
 	
 	//detects only black
-	if(max_white<120 && range<80)
+	if((max_white<120 && range<80) || max_white<100)
 	{
 		white_threshold = 255;
 	//detects only white
-	}else if(min_white>100 && range<150) {
+	}else if((min_white>120 && range<150) || min_white>180) {
 		white_threshold = 0;
 	//mixed detection
 	}else{
